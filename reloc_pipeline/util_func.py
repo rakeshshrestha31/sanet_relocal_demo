@@ -347,7 +347,8 @@ def compute_pose_lm_pnp(gt_Tcws, query_X_w, rand_R, scene_center, query_K, pnp_x
     query_X_3d_w = query_X_3d_w.view(N, H, W, 3).squeeze(0).detach().cpu().numpy()
 
     # run Ransac PnP
-    lm_pnp_pose_vec, inlier_map = lm_pnp.compute_lm_pnp(pnp_x_2d, query_X_3d_w, query_K, repro_thres, 128, 100)
+    lm_pnp_pose_vec = lm_pnp.compute_lm_pnp(pnp_x_2d, query_X_3d_w, query_K,
+                                            repro_thres, 128, 100)
     R_res, _ = cv2.Rodrigues(lm_pnp_pose_vec[:3])
     lm_pnp_pose = np.eye(4, dtype=np.float32)
     lm_pnp_pose[:3, :3] = R_res
@@ -360,7 +361,7 @@ def compute_pose_lm_pnp(gt_Tcws, query_X_w, rand_R, scene_center, query_K, pnp_x
     t_acc = rel_distance(lm_pnp_pose, gt_pose)
 
     #     ransc_inlier = None
-    return R_acc, t_acc, lm_pnp_pose, inlier_map
+    return R_acc, t_acc, lm_pnp_pose
 
 
 def recover_original_scene_coordinates_all_level(query_X_ws, rand_R, scene_center):
