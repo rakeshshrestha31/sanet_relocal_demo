@@ -76,9 +76,7 @@ if __name__ == '__main__':
     # re-organize sequences
     for seq_name in seq_names:
         if not os.path.isdir(seq_name):
-            continue
-
-        if not os.path.isfile(os.path.join(seq_dir, seq_name, 'groundtruth.txt')):
+            print('missing seq', seq_name)
             continue
 
         re_organize(os.path.join(seq_dir, seq_name))
@@ -119,8 +117,8 @@ if __name__ == '__main__':
         train_frames += seq.frames
 
     # dump
-    with open(os.path.join(seq_dir, 'test_frames.bin')) as f:
+    with open(os.path.join(seq_dir, 'test_frames.bin'), 'wb') as f:
         pickle.dump(test_frames, f)
 
-    with open(os.path.join(seq_dir, 'train_frames.bin')) as f:
+    with open(os.path.join(seq_dir, 'train_frames.bin'), 'wb') as f:
         pickle.dump(train_frames, f)
